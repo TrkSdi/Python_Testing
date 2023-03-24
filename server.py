@@ -55,6 +55,7 @@ def purchasePlaces():
         if placesRequired <= 12:
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             flash('Great-booking complete!')
+            # update la base de donnée json
             return render_template('welcome.html', club=club, competitions=competitions)
         else: 
             flash('No more than 12 places can be booked')
