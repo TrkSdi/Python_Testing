@@ -1,22 +1,6 @@
-import json
-
-def loadClubs():
-    with open('clubs.json') as c:
-         listOfClubs = json.load(c)['clubs']
-         return listOfClubs
 
 
-def loadCompetitions():
-    with open('competitions.json') as comps:
-         listOfCompetitions = json.load(comps)['competitions']
-         return listOfCompetitions
-     
-     
-competitions = loadCompetitions()
-clubs = loadClubs()
+"Fall%20Classic"
+"john@simplylift.co"
+"127.0.0.1:5000/book/Fall%20Classic/Simply%20Lift"
 
-    
-def add(a, b):
-    return a + b
-
-print(add([1, 3], [2]))
