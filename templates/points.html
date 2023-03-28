@@ -2,7 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Club's points</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <title>Clubs</title>
 </head>
 <body>
 
@@ -16,11 +17,20 @@
     {% endif%}
     {% endwith %}
 
-    <h3>Clubs / Available points</h3>
-    <ul>
+    <h3>Clubs</h3>
+    
+    <table>
+        <tr>
+            <td>Clubs</td>
+            <td>Points</td>
+        </tr>
         {% for club in all_clubs %}
-        <li>{{club['name']}}: {{club['points']}}</li>
+        <tr>
+            <td>{{club['name']}}</td>
+            <td>{{club['points']}}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
+        
     <!-- Lien à corriger-->
-    <a href="{{ url_for('showSummary')}}">Back to booking</a>
+    <a class="link" href="{{ url_for('showSummary')}}">Back to booking</a>
