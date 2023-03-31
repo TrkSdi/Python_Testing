@@ -2,6 +2,8 @@ import json
 from flask import Flask,render_template,request,redirect,flash,url_for
 from datetime import datetime
 
+from numpy import empty
+
 
 def loadClubs():
     with open('clubs.json') as c:
@@ -75,29 +77,35 @@ def purchasePlaces():
     now = now_date_str()
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
-    placesRequired = int(request.form['places'])
+    placesRequired = request.form['places']
+    print("TEST", placesRequired)
     club_points = int(club['points'])
-    if int(competition['numberOfPlaces']) >= placesRequired:
-        if placesRequired < 13:
-            if club_points < placesRequired:
-                flash("Not enough points")
-                return render_template('welcome.html', club=club, competitions=competitions, now=now)
-            else:
-                competition_places = int(competition['numberOfPlaces'])-placesRequired
-                club_points = int(club['points'])-placesRequired
-                flash('Great-booking complete!')
-                competition['numberOfPlaces'] = str(competition_places)
-                club['points'] = str(club_points)
-                # update json database
-                updateCompetition(number_places=competition['numberOfPlaces'], index=competitions.index(competition))
-                updateClub(points=club['points'], index= clubs.index(club))
-                return render_template('welcome.html', club=club, competitions=competitions, now=now)
-        else: 
-            flash('No more than 12 places can be booked')
-            return render_template('welcome.html', club=club, competitions=competitions, now=now)
-    else:
-        flash('Not enough places') 
+    if placesRequired == '':
+        flash("Invalid value")
         return render_template('welcome.html', club=club, competitions=competitions, now=now)
+    else:
+        placesRequired = int(request.form['places'])
+        if int(competition['numberOfPlaces']) >= placesRequired:
+            if placesRequired <= 12:
+                if club_points < placesRequired:
+                    flash("Not enough points")
+                    return render_template('welcome.html', club=club, competitions=competitions, now=now)
+                else:
+                    competition_places = int(competition['numberOfPlaces'])-placesRequired
+                    club_points = int(club['points'])-placesRequired
+                    flash('Great-booking complete!')
+                    competition['numberOfPlaces'] = str(competition_places)
+                    club['points'] = str(club_points)
+                    # update json database
+                    updateCompetition(number_places=competition['numberOfPlaces'], index=competitions.index(competition))
+                    updateClub(points=club['points'], index= clubs.index(club))
+                    return render_template('welcome.html', club=club, competitions=competitions, now=now)
+            else: 
+                flash('No more than 12 places can be booked')
+                return render_template('welcome.html', club=club, competitions=competitions, now=now)
+        else:
+            flash('Not enough places') 
+            return render_template('welcome.html', club=club, competitions=competitions, now=now)
 
 
 @app.route('/pointDisplay')
