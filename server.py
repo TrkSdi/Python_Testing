@@ -16,17 +16,33 @@ def loadCompetitions():
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
     
-def updateCompetition(number_places, index):
-    with open('competitions.json') as f:
-        data = json.load(f)
-        data['competitions'][index]['numberOfPlaces'] = number_places
-        json.dump(data, open('competitions.json', 'w'), indent=4)
+#def updateCompetition(number_places, index):
+#    with open('competitions.json') as f:
+#        data = json.load(f)
+#        data['competitions'][index]['numberOfPlaces'] = number_places
+#        json.dump(data, open('competitions.json', 'w'), indent=4)
 
-def updateClub(points, index):
-    with open('clubs.json') as f:
-        data = json.load(f)
-        data['clubs'][index]['points'] = points
-        json.dump(data, open('clubs.json', 'w'), indent=4)
+def update_competitions(competitions, competition):
+    competitions_json = open("competitions.json", "w")
+    for data in competitions:
+        if data['name'] == competition['name']:
+            data['numberOfPlaces'] = str(competition['numberOfPlaces'])
+    json.dump({'competitions':competitions}, competitions_json, indent=4)
+
+#def updateClub(points, index):
+#    with open('clubs.json') as f:
+#        data = json.load(f)
+#        data['clubs'][index]['points'] = points
+#        json.dump(data, open('clubs.json', 'w'), indent=4)
+        
+def update_club(clubs, club):
+    club_json = open("clubs.json", "w")
+    for data in clubs:
+        if data['name'] == club['name']:
+            data['points'] = str(club['points'])
+    json.dump({'clubs':clubs}, club_json, indent=4)      
+        
+        
 
 app = Flask(__name__)
 app.secret_key = 'something_special'
@@ -43,13 +59,21 @@ def now_date_str():
 def index():
     return render_template('index.html')
 
+def search_club_email(club_email):
+    clubs = [club for club in clubs if club['email'] == club_email]
+    if len(clubs) > 0:
+        return clubs[0]
+    else:
+        return None
+    
+### A faire pour competition et club_name
+    
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
     now = now_date_str()
     if request.method == 'POST':
-        club = [club for club in clubs if club['email'] == request.form['email']]
-        if len(club) == 1:
-            club = club[0]
+        club = search_club_email(request.form['email'])
+        if club:
             return render_template('welcome.html',club=club,competitions=competitions, now=now)
         else:
             flash("Email not found")
@@ -78,7 +102,6 @@ def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = request.form['places']
-    print("TEST", placesRequired)
     club_points = int(club['points'])
     if placesRequired == '':
         flash("Invalid value")
@@ -97,8 +120,14 @@ def purchasePlaces():
                     competition['numberOfPlaces'] = str(competition_places)
                     club['points'] = str(club_points)
                     # update json database
-                    updateCompetition(number_places=competition['numberOfPlaces'], index=competitions.index(competition))
-                    updateClub(points=club['points'], index= clubs.index(club))
+                    competitions_data = loadCompetitions()
+                    clubs_data = loadClubs()
+                    update_competitions(competitions_data, competition)
+                    update_club(clubs_data, club)
+                    
+                    
+                    #updateCompetition(number_places=competition['numberOfPlaces'], index=competitions.index(competition))
+                    #updateClub(points=club['points'], index= clubs.index(club))
                     return render_template('welcome.html', club=club, competitions=competitions, now=now)
             else: 
                 flash('No more than 12 places can be booked')
