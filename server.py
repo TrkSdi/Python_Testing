@@ -16,11 +16,6 @@ def loadCompetitions():
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
     
-#def updateCompetition(number_places, index):
-#    with open('competitions.json') as f:
-#        data = json.load(f)
-#        data['competitions'][index]['numberOfPlaces'] = number_places
-#        json.dump(data, open('competitions.json', 'w'), indent=4)
 
 def update_competitions(competitions, competition):
     competitions_json = open("competitions.json", "w")
@@ -29,11 +24,6 @@ def update_competitions(competitions, competition):
             data['numberOfPlaces'] = str(competition['numberOfPlaces'])
     json.dump({'competitions':competitions}, competitions_json, indent=4)
 
-#def updateClub(points, index):
-#    with open('clubs.json') as f:
-#        data = json.load(f)
-#        data['clubs'][index]['points'] = points
-#        json.dump(data, open('clubs.json', 'w'), indent=4)
         
 def update_club(clubs, club):
     club_json = open("clubs.json", "w")
@@ -59,33 +49,30 @@ def now_date_str():
 def index():
     return render_template('index.html')
 
-def search_club_email(club_email):
-    clubs = [club for club in clubs if club['email'] == club_email]
-    if len(clubs) > 0:
-        return clubs[0]
-    else:
-        return None
-    
-### A faire pour competition et club_name
     
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
     now = now_date_str()
-    if request.method == 'POST':
-        club = search_club_email(request.form['email'])
-        if club:
-            return render_template('welcome.html',club=club,competitions=competitions, now=now)
-        else:
-            flash("Email not found")
-            return redirect(url_for("index"))
+    club = [club for club in clubs if club['email'] == request.form['email']]
+    if len(club) == 1:
+        club = club[0]
+        return render_template('welcome.html',club=club,competitions=competitions, now=now)
+    else:
+        flash("Email not found")
+        return redirect(url_for("index"))
 
 
 @app.route('/book/<competition>/<club>')
 def book(competition,club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
+    now = now_date_str()
+    foundClub = [c for c in clubs if c['name'] == club]
+    if len(foundClub) == 1:
+        foundClub = foundClub[0]
+    foundCompetition = [c for c in competitions if c['name'] == competition]
+    if len(foundCompetition) == 1:
+        foundCompetition = foundCompetition[0]
     if foundClub and foundCompetition:
-        now = now_date_str()
+        
         if foundCompetition['date'] > now:
             return render_template('booking.html',club=foundClub,competition=foundCompetition, now=now)
         else:
@@ -99,8 +86,12 @@ def book(competition,club):
 @app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
     now = now_date_str()
-    competition = [c for c in competitions if c['name'] == request.form['competition']][0]
-    club = [c for c in clubs if c['name'] == request.form['club']][0]
+    competition = [c for c in competitions if c['name'] == request.form['competition']]
+    if len(competition) == 1:
+        competition = competition[0]
+    club = [c for c in clubs if c['name'] == request.form['club']]
+    if len(club) == 1:
+        club = club[0]
     placesRequired = request.form['places']
     club_points = int(club['points'])
     if placesRequired == '':

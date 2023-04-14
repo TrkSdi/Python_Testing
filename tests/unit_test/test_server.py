@@ -70,6 +70,5 @@ def test_no_competition_scheduled(client, no_competition_scheduled):
 
 def test_logout_success(client):
     response = client.get('/logout')
-    
     assert response.status_code == 302
 
