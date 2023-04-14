@@ -49,3 +49,57 @@
     We also like to show how well we're testing, so there's a module called 
     [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
 
+    ### Unit Test 
+
+    For unit test use the following line:
+
+    <pytest>
+
+    ### Coverage
+
+    To get the percentage of unit test cover, use the following line:
+
+    <pytest --cov=.>
+
+    To run performance test and get html report, use the following line:
+
+    <pytest --cov=. --cov-report html>
+
+    ### Performance Test
+
+    Use Locust to run the performance test
+
+    1 - To install locust:
+
+    <pip install locust>
+
+    2 -  Run flask server :
+
+    <flask run>
+
+    3 - Run Locust :
+
+    <locust locust -f tests/performance_tests/locust.py>
+
+    4 - Use the following address: 
+
+    <http://0.0.0.0:8089/>
+
+    5 - Enter the localhost address and launch test
+
+    ### Integration Test
+
+    Integration test are using custom marker integtest
+
+    1 - Run only integration test 
+
+    <pytest -m integtest>
+
+    2 - Run unit test without integration test 
+
+    <pytest -m "not integtest">
+
+
+
+
+
