@@ -92,5 +92,26 @@ def test_purchase_for_past_competition_return_error(client, competitions, data_f
     assert 'impossible to book a past competition' in response.data.decode()
     
 
+def test_access_booking_for_future_competition(client, competitions, data_form_purchase_2):
+    response = client.get(f'/book/{competitions[1]["name"]}/{data_form_purchase_2["club"]}')
+    assert response.status_code == 200
   
+
+def test_access_booking_return_error(client, no_competition_scheduled, data_form_purchase_2):
+    response = client.get(f'/book/{no_competition_scheduled[0]}/{data_form_purchase_2["club"]}')
     
+    assert 'Something went wrong-please try again' in response.data.decode()
+
+def test_cannot_book_more_than_club_point_available(client, club_1, competitions, data_form_purchase_2):
+    club_points_before = int(club_1[0]["points"])
+    competition_number_place_before = int(competitions[1]["numberOfPlaces"])
+    
+    response = client.post('/purchasePlaces', data=data_form_purchase_2)
+    
+    # Check status code
+    assert response.status_code == 200
+    # check booking has been made correctly : 
+    assert club_points_before == int(club_1[0]["points"])
+    assert competition_number_place_before == int(competitions[1]["numberOfPlaces"])
+    # flash message : 
+    assert 'Not enough points' in response.data.decode()

@@ -19,6 +19,17 @@ def clubs():
         }
         ]
     yield clubs
+    
+@pytest.fixture
+def club_1():
+    clubs = server.clubs = [
+        {
+            "name": "Test",
+            "email": "test@test.com",
+            "points": "1"
+        }
+        ]
+    yield clubs
 
 @pytest.fixture
 def competitions():

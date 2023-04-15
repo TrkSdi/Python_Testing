@@ -1,4 +1,0 @@
-locust -f tests/performance_tests/locust.py --host=127.0.0.1:5000
-
-
-pytest --cov=. --cov-report html
