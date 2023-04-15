@@ -53,39 +53,35 @@
 
     For unit test use the following line:
 
-    <pytest>
+    <code>pytest</code>
 
     ### Coverage
 
     To get the percentage of unit test cover, use the following line:
 
-    <pytest --cov=.>
+    <code>pytest --cov=.</code>
 
     To run performance test and get html report, use the following line:
 
-    <pytest --cov=. --cov-report html>
+    <code>pytest --cov=. --cov-report html</code>
 
     ### Performance Test
 
     Use Locust to run the performance test
 
-    1 - To install locust:
+    1 -  Run flask server :
 
-    <pip install locust>
+    <code>flask run</code>
 
-    2 -  Run flask server :
+    2 - Run Locust :
 
-    <flask run>
+    <code>locust locust -f tests/performance_tests/locust.py>
 
-    3 - Run Locust :
+    3 - Use the following address: 
 
-    <locust locust -f tests/performance_tests/locust.py>
+    <code>http://0.0.0.0:8089/</code>
 
-    4 - Use the following address: 
-
-    <http://0.0.0.0:8089/>
-
-    5 - Enter the localhost address and launch test
+    4 - Enter the localhost address and launch test
 
     ### Integration Test
 
@@ -93,11 +89,11 @@
 
     1 - Run only integration test 
 
-    <pytest -m integtest>
+    <code>pytest -m integtest</code>
 
     2 - Run unit test without integration test 
 
-    <pytest -m "not integtest">
+    <code>pytest -m "not integtest"</code>
 
 
 
