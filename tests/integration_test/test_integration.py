@@ -1,3 +1,4 @@
+import shutil
 import pytest
 
 
@@ -53,3 +54,9 @@ def test_get_data_display_points(client, clubs):
 def test_logout_success(client):
     response = client.get('/logout')
     assert response.status_code == 302
+    
+# INIT DATA
+@pytest.mark.integtest
+def test_init_data():
+    shutil.copyfile('data/clubs.json', 'clubs.json')
+    shutil.copyfile('data/competitions.json', 'competitions.json')

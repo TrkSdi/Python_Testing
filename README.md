@@ -75,7 +75,7 @@
 
     2 - Run Locust :
 
-    <code>locust locust -f tests/performance_tests/locust.py></code>
+    <code>locust -f tests/performance_tests/locust.py</code>
 
     3 - Use the following address: 
 

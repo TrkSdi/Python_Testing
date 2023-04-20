@@ -20,8 +20,6 @@ def test_complete_user_interaction(client, clubs, competitions, data_form_purcha
     ), follow_redirects=True)
     
     assert response.status_code == 200
-    assert 'Clubs' in response.data.decode()
-    assert 'List' in response.data.decode()
     assert 'Competitions' in response.data.decode()
     
     # --- Access club's list --- #

@@ -12,6 +12,16 @@
         <input type="email" name="email" id=""/>
         <button type="submit">Enter</button>
     </form>
+    
+    <br>
+    <hr>
+    <br>
+
+    <h3><a href="{{url_for('pointDisplay')}}">Club's list</a></h3>
+   
+    
+
+
     {% with messages = get_flashed_messages()%}
     {% if messages %}
     <h2>Error:</h2>

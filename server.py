@@ -50,7 +50,7 @@ def index():
     return render_template('index.html')
 
     
-@app.route('/showSummary',methods=['POST'])
+@app.route('/showSummary',methods=['GET','POST'])
 def showSummary():
     now = now_date_str()
     club = [club for club in clubs if club['email'] == request.form['email']]
@@ -115,10 +115,6 @@ def purchasePlaces():
                     clubs_data = loadClubs()
                     update_competitions(competitions_data, competition)
                     update_club(clubs_data, club)
-                    
-                    
-                    #updateCompetition(number_places=competition['numberOfPlaces'], index=competitions.index(competition))
-                    #updateClub(points=club['points'], index= clubs.index(club))
                     return render_template('welcome.html', club=club, competitions=competitions, now=now)
             else: 
                 flash('No more than 12 places can be booked')
